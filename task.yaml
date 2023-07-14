@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: ami-053b0d53c279acc90 # Replace with the appropriate AMI ID
+      KeyName: s3connect
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo apt-get update
+          sudo apt-get -y install apache2
+          sudo apt-get -y install awscli
+          sudo aws s3 sync s3://djautomate /var/www/html/
+          sudo systemctl restart apache2
